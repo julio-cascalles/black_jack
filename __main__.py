@@ -2,14 +2,14 @@ from elements.game import Game
 
 
 game = Game()
-reason = 'Starting...'
+status = 'Starting...'
 while not game.winner:
     if game.rounds % 2 == 0:
         print('-'*30)
-    reason = game.turn()
+    status = game.turn()
 print('='*30)
 print('Winner: {} - {}'.format(
-    game.winner.name, reason
+    game.winner.name, status
 ))
 print('-'*30)
 print('RANKING:')

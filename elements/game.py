@@ -5,7 +5,7 @@ from elements.player import Player
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, rounds:int=6):
         self.deck = [
             Card(name, color) for name in Card.TYPES
             for color in Card.COLORS
@@ -13,7 +13,7 @@ class Game:
         shuffle(self.deck)
         self.players = cycle([Player('Alice'), Player('Bob')])
         self.winner = None
-        self.rounds = 6
+        self.rounds = rounds
     
     def turn(self) -> str:
         player = next(self.players)
