@@ -1,15 +1,14 @@
 from elements.card import CardList
 
 
+IS_EQUAL  = lambda x, y: x == y
+NOT_EQUAL = lambda x, y: x != y
+
 class Player:
     all_players = []
-    SHOW_CARDS: callable = lambda player: print('{}:\n{}'.format(
-        player.name, ' '.join( str(card) for card in player.hand )
-    ))
-    CONTENT = lambda x: next(iter(x), None)
 
     def __new__(cls, name: str):
-        found = cls.CONTENT(p for p in cls.all_players if p.name == name)
+        found = cls.find(name)
         if not found:
             if len(cls.all_players) == 2:
                 raise IndexError('There are too many players!')
@@ -19,9 +18,18 @@ class Player:
             cls.all_players.append(found)
         return found
 
+    @classmethod
+    def find(cls, search: str, compare: callable = IS_EQUAL) -> 'Player':
+        for player in cls.all_players:
+            if compare(player.name, search):
+                return player
+        return None
+
     def draw(self, deck: list):
         self.hand.append(deck.pop(0))
-        self.SHOW_CARDS()
+        print('{}:\n{}'.format(
+            self.name, ' '.join( str(card) for card in self.hand )
+        ))
 
     def score(self) -> int:
         total: int = 0
@@ -30,4 +38,4 @@ class Player:
         return total
 
     def opponent(self):
-        return Player.CONTENT(p for p in Player.all_players if p != self)
+        return self.find(self.name, NOT_EQUAL)
